@@ -47,7 +47,7 @@ use crate::{
 /// newly-allocated `Entity` handle. Very long-lived applications should therefore limit the period
 /// over which they may retain handles of despawned entities.
 pub struct World {
-    entities: Entities,
+    pub(crate) entities: Entities,
     archetypes: ArchetypeSet,
     /// Maps statically-typed bundle types to archetypes
     bundle_to_archetype: TypeIdMap<u32>,

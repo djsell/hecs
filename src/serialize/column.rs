@@ -291,7 +291,9 @@ where
     }
 
     let predicate = |x: &&Archetype| -> bool { !x.is_empty() && x.satisfies::<Q>() };
-    let mut seq = serializer.serialize_seq(Some(world.archetypes().filter(predicate).count()))?;
+    let mut seq =
+        serializer.serialize_seq(Some(world.archetypes().filter(predicate).count() + 1))?;
+    seq.serialize_element(&world.entities)?;
     for archetype in world.archetypes().filter(predicate) {
         seq.serialize_element(&SerializeArchetype {
             world,
@@ -522,12 +524,16 @@ where
     {
         let mut world = World::new();
         let mut entities = Vec::new();
+        let allocator = seq.next_element()?.unwrap();
+
         while let Some(bundle) =
             seq.next_element_seed(DeserializeArchetype(self.0, &mut entities))?
         {
             world.spawn_column_batch_at(&entities, bundle);
             entities.clear();
         }
+
+        world.entities = allocator;
         Ok(world)
     }
 }

@@ -148,6 +148,7 @@ impl<'a> Iterator for ReserveEntitiesIterator<'a> {
 impl<'a> ExactSizeIterator for ReserveEntitiesIterator<'a> {}
 
 #[derive(Default)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub(crate) struct Entities {
     pub meta: Vec<EntityMeta>,
 
@@ -532,6 +533,7 @@ impl Entities {
 }
 
 #[derive(Copy, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub(crate) struct EntityMeta {
     pub generation: NonZeroU32,
     pub location: Location,
@@ -551,6 +553,7 @@ impl EntityMeta {
 }
 
 #[derive(Copy, Clone)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub(crate) struct Location {
     pub archetype: u32,
     pub index: u32,
