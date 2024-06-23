@@ -1007,6 +1007,33 @@ mod tests {
     }
 
     #[test]
+    fn structural_integrity() {
+        let mut a = World::new();
+        let mut b = World::new();
+
+        let p = Position([0.0, 0.0, 0.0]);
+        let v = Velocity([0.0, 0.0, 0.0]);
+
+        let ae = a.spawn((p,));
+        let be = b.spawn((p,));
+
+        a.spawn((p, v));
+        b.spawn((p, v));
+
+        a.despawn(ae).unwrap();
+        b.despawn(be).unwrap();
+
+        // a predicts correctly
+        a.spawn((p,));
+
+        // b predicts incorrectly - rollback
+        // b = de(ser(b));
+        b.spawn((p,));
+
+        // assert_eq!(ser(a), ser(b));
+    }
+
+    #[test]
     #[rustfmt::skip]
     fn test_serialize_satisfying() {
         use serde_test::{Token, assert_ser_tokens};
