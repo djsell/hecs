@@ -290,7 +290,7 @@ where
         }
     }
 
-    let predicate = |x: &&Archetype| -> bool { !x.is_empty() && x.satisfies::<Q>() };
+    let predicate = |x: &&Archetype| -> bool { x.satisfies::<Q>() };
     let mut seq =
         serializer.serialize_seq(Some(world.archetypes().filter(predicate).count() + 1))?;
     seq.serialize_element(&world.entities)?;
